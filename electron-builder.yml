@@ -1,5 +1,5 @@
-appId: com.emoji.app
-productName: emoji-app
+appId: com.keymojis.app
+productName: KeyMojis
 directories:
   buildResources: build
 files:
@@ -12,7 +12,7 @@ files:
 asarUnpack:
   - resources/**
 win:
-  executableName: emoji-app
+  executableName: KeyMojis
 nsis:
   artifactName: ${name}-${version}-setup.${ext}
   shortcutName: ${productName}
@@ -26,8 +26,12 @@ mac:
     - NSDocumentsFolderUsageDescription: Application requests access to the user's Documents folder.
     - NSDownloadsFolderUsageDescription: Application requests access to the user's Downloads folder.
   notarize: false
+  hardenedRuntime: true
+  gatekeeperAssess: false
+afterSign: './notarize.js'
 dmg:
   artifactName: ${name}-${version}.${ext}
+  sign: false
 linux:
   target:
     - AppImage
@@ -39,7 +43,7 @@ appImage:
   artifactName: ${name}-${version}.${ext}
 npmRebuild: false
 publish:
-  provider: generic
-  url: https://example.com/auto-updates
+  provider: github
+  releaseType: release
 electronDownload:
   mirror: https://npmmirror.com/mirrors/electron/

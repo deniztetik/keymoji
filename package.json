@@ -1,10 +1,14 @@
 {
-  "name": "emoji-app",
+  "name": "KeyMojis",
   "version": "1.0.0",
   "description": "An Electron application with Vue and TypeScript",
   "main": "./out/main/index.js",
   "author": "example.com",
   "homepage": "https://electron-vite.org",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/deniztetik/keymoji.git"
+  },
   "scripts": {
     "format": "prettier --write .",
     "lint": "eslint . --ext .js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts,.vue --fix",
@@ -18,7 +22,9 @@
     "build:unpack": "npm run build && electron-builder --dir",
     "build:win": "npm run build && electron-builder --win",
     "build:mac": "npm run build && electron-builder --mac",
-    "build:linux": "npm run build && electron-builder --linux"
+    "build:linux": "npm run build && electron-builder --linux",
+    "release": "electron-builder",
+    "checkNotarizationHistory": "bun scripts/checkNotaryToolHistory.ts"
   },
   "devDependencies": {
     "@electron-toolkit/eslint-config": "^1.0.2",
@@ -26,20 +32,17 @@
     "@electron-toolkit/preload": "^3.0.0",
     "@electron-toolkit/tsconfig": "^1.0.1",
     "@electron-toolkit/utils": "^3.0.0",
+    "@electron/notarize": "^2.3.0",
     "@rushstack/eslint-patch": "^1.7.1",
     "@types/node": "^18.19.9",
-    "@vitejs/plugin-vue": "^5.0.3",
-    "@vue/eslint-config-prettier": "^9.0.0",
-    "@vue/eslint-config-typescript": "^12.0.0",
     "electron": "^28.2.0",
     "electron-builder": "^24.9.1",
+    "electron-notarize": "^1.2.2",
+    "electron-updater": "^6.1.8",
     "electron-vite": "^2.0.0",
     "eslint": "^8.56.0",
-    "eslint-plugin-vue": "^9.20.1",
     "prettier": "^3.2.4",
     "typescript": "^5.3.3",
-    "vite": "^5.0.12",
-    "vue": "^3.4.15",
-    "vue-tsc": "^1.8.27"
+    "vite": "^5.0.12"
   }
 }
