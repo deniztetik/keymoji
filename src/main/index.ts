@@ -9,7 +9,7 @@ const store = new Store()
 const owner = 'deniztetik'
 const repo = 'keymoji'
 const token = process.env.GH_TOKEN
-store.set('githubAccessToken', token)
+store.set('githubToken', token)
 
 let pickerWindow: BrowserWindow | null = null
 
@@ -94,8 +94,8 @@ function createTray() {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.whenReady().then(() => {
-  const feedURL = `https://api.github.com/repos/${owner}/${repo}/releases/latest`
-  const accessToken = store.get('githubAccessToken')
+  const feedURL = `https://api.github.com/repos/${owner}/${repo}/releases`
+  const accessToken = store.get('githubToken')
 
   if (app.dock) {
     app.dock.hide()
