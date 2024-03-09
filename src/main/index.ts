@@ -5,7 +5,7 @@ import trayicon from '../../resources/trayicon.png?asset'
 
 const owner = 'deniztetik'
 const repo = 'keymoji'
-const token = process.env.GITHUB_TOKEN
+const token = process.env.GH_TOKEN
 
 let pickerWindow: BrowserWindow | null = null
 
