@@ -1,7 +1,11 @@
-import { app, BrowserWindow, globalShortcut, ipcMain, Tray } from 'electron'
+import { app, autoUpdater, BrowserWindow, dialog, globalShortcut, ipcMain, Tray } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import trayicon from '../../resources/trayicon.png?asset'
+
+const owner = 'deniztetik'
+const repo = 'keymoji'
+const token = process.env.GITHUB_TOKEN
 
 let pickerWindow: BrowserWindow | null = null
 
@@ -86,6 +90,8 @@ function createTray() {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.whenReady().then(() => {
+  const feedURL = `https://api.github.com/repos/${owner}/${repo}/releases/latest`
+
   if (app.dock) {
     app.dock.hide()
   }
@@ -105,6 +111,15 @@ app.whenReady().then(() => {
     app.quit()
   })
 
+  autoUpdater.setFeedURL({
+    url: feedURL,
+    headers: {
+      Authorization: `token ${token}`
+    }
+  })
+
+  autoUpdater.checkForUpdates()
+
   createTray()
 })
 
@@ -119,3 +134,17 @@ app.on('window-all-closed', () => {
 
 // In this file you can include the rest of your app"s specific main process
 // code. You can also put them in separate files and require them here.
+
+autoUpdater.on('update-downloaded', (_, __, releaseName) => {
+  const dialogOpts = {
+    type: 'info',
+    buttons: ['Restart', 'Later'],
+    title: 'Application Update',
+    message: releaseName,
+    detail: 'A new version has been downloaded. Restart the application to apply the updates.'
+  }
+
+  dialog.showMessageBox(dialogOpts).then((returnValue) => {
+    if (returnValue.response === 0) autoUpdater.quitAndInstall()
+  })
+})
