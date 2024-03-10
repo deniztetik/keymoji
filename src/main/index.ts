@@ -90,7 +90,8 @@ function createTray() {
 // Some APIs can only be used after this event occurs.
 app.whenReady().then(() => {
   if (app.isPackaged) {
-    autoUpdater.checkForUpdatesAndNotify()
+    autoUpdater.autoDownload = false
+    autoUpdater.checkForUpdates()
   }
 
   if (app.dock) {
