@@ -15,6 +15,15 @@ let pickerWindow: BrowserWindow | null = null
 
 console.log('++process.ENV.GH_TOKEN++', process.env.GH_TOKEN)
 
+autoUpdater.setFeedURL({
+  provider: 'github',
+  repo: 'keymoji',
+  owner: 'deniztetik',
+  private: true,
+  token:
+    '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'
+})
+
 function createTray() {
   function createPickerWindow() {
     pickerWindow = new BrowserWindow({
@@ -96,14 +105,6 @@ function createTray() {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.whenReady().then(() => {
-  autoUpdater.setFeedURL({
-    provider: 'github',
-    repo: 'keymoji',
-    owner: 'deniztetik',
-    private: true,
-    token: process.env.GH_TOKEN
-  })
-
   autoUpdater.checkForUpdatesAndNotify()
 
   if (app.dock) {
