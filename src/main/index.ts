@@ -16,9 +16,7 @@ let pickerWindow: BrowserWindow | null = null
 
 const feedURL = `https://api.github.com/repos/${owner}/${repo}/releases`
 
-if (app.isPackaged) {
-  autoUpdater.checkForUpdatesAndNotify()
-}
+log.initialize()
 
 function createTray() {
   function createPickerWindow() {
@@ -101,6 +99,10 @@ function createTray() {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.whenReady().then(() => {
+  if (app.isPackaged) {
+    autoUpdater.checkForUpdatesAndNotify()
+  }
+
   if (app.dock) {
     app.dock.hide()
   }
