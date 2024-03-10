@@ -1,11 +1,18 @@
-import { app, autoUpdater, BrowserWindow, dialog, globalShortcut, ipcMain, Tray } from 'electron'
-import Store from 'electron-store'
+import {
+  app,
+  autoUpdater,
+  BrowserWindow,
+  dialog,
+  globalShortcut,
+  ipcMain,
+  Menu,
+  Tray
+} from 'electron'
 import { join } from 'path'
 import dotenv from 'dotenv'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import trayicon from '../../resources/trayicon.png?asset'
 
-const store = new Store()
 dotenv.config()
 
 const owner = 'deniztetik'
@@ -13,6 +20,21 @@ const repo = 'keymoji'
 const token = process.env.GITHUB_TOKEN
 
 let pickerWindow: BrowserWindow | null = null
+
+const feedURL = `https://api.github.com/repos/${owner}/${repo}/releases`
+
+autoUpdater.setFeedURL({
+  url: feedURL,
+  headers: {
+    Authorization: `token ${token}`
+  }
+})
+
+autoUpdater.logger.transports.file.level = 'debug'
+
+function checkForUpdates() {
+  autoUpdater.checkForUpdates()
+}
 
 function createTray() {
   function createPickerWindow() {
@@ -95,8 +117,6 @@ function createTray() {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.whenReady().then(() => {
-  const feedURL = `https://api.github.com/repos/${owner}/${repo}/releases`
-
   if (app.dock) {
     app.dock.hide()
   }
@@ -116,13 +136,6 @@ app.whenReady().then(() => {
     app.quit()
   })
 
-  autoUpdater.setFeedURL({
-    url: feedURL,
-    headers: {
-      Authorization: `token ${token}`
-    }
-  })
-
   autoUpdater.checkForUpdates()
 
   createTray()
@@ -140,6 +153,16 @@ app.on('window-all-closed', () => {
 // In this file you can include the rest of your app"s specific main process
 // code. You can also put them in separate files and require them here.
 
+// Listen for update events
+autoUpdater.on('update-available', () => {
+  dialog.showMessageBox({
+    type: 'info',
+    title: 'Update Available',
+    message:
+      'A new version of the app is available. It will be downloaded and installed automatically.'
+  })
+})
+
 autoUpdater.on('update-downloaded', (_, __, releaseName) => {
   const dialogOpts = {
     type: 'info',
@@ -153,3 +176,25 @@ autoUpdater.on('update-downloaded', (_, __, releaseName) => {
     if (returnValue.response === 0) autoUpdater.quitAndInstall()
   })
 })
+
+autoUpdater.on('error', (error) => {
+  dialog.showErrorBox('Update Error', error == null ? 'unknown' : (error.stack || error).toString())
+})
+
+// Create a menu item for manual update check
+const menuTemplate = [
+  // ...
+  {
+    label: 'Help',
+    submenu: [
+      {
+        label: 'Check for Updates',
+        click: checkForUpdates
+      }
+    ]
+  }
+]
+
+// Set the application menu
+const menu = Menu.buildFromTemplate(menuTemplate)
+Menu.setApplicationMenu(menu)
