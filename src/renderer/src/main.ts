@@ -1,4 +1,4 @@
-import emojiCategories from './emojiCategories'
+import categories from '../../../resources/categories.json'
 
 const recentEmojisKey = 'recentEmojis'
 const maxRecentEmojis = 20
@@ -78,7 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
   pickerContainer.appendChild(recentEmojisHeader)
   pickerContainer.appendChild(recentEmojisGrid)
 
-  Object.entries(emojiCategories).forEach(([categoryName, emojis]) => {
+  Object.entries(categories.emojis).forEach(([categoryName, emojis]) => {
     const categoryHeader = document.createElement('h2')
     categoryHeader.textContent = categoryName
     categoryHeader.style.textAlign = 'center'
@@ -89,24 +89,26 @@ document.addEventListener('DOMContentLoaded', () => {
     emojiGrid.style.gap = '5px'
     emojiGrid.style.padding = '10px'
 
-    emojis.forEach((emoji) => {
-      const emojiElement = document.createElement('button')
-      emojiElement.textContent = emoji
-      emojiElement.className = 'emoji'
-      emojiElement.style.fontSize = '24px'
-      emojiElement.style.cursor = 'pointer'
-      emojiElement.style.border = 'none'
-      emojiElement.style.background = 'none'
-      emojiElement.addEventListener('click', () => {
-        saveRecentEmoji(emoji) // Save as a recent emoji
-        updateRecentEmojisSection() // Update the recent emojis section
-        navigator.clipboard.writeText(emoji).then(() => {
-          window.close()
+    Object.values(emojis)
+      .flatMap((arr) => arr)
+      .forEach((emoji) => {
+        const emojiElement = document.createElement('button')
+        emojiElement.textContent = emoji.emoji
+        emojiElement.className = 'emoji'
+        emojiElement.style.fontSize = '24px'
+        emojiElement.style.cursor = 'pointer'
+        emojiElement.style.border = 'none'
+        emojiElement.style.background = 'none'
+        emojiElement.addEventListener('click', () => {
+          saveRecentEmoji(emoji.emoji) // Save as a recent emoji
+          updateRecentEmojisSection() // Update the recent emojis section
+          navigator.clipboard.writeText(emoji.emoji).then(() => {
+            setTimeout(window.close, 10)
+          })
         })
-      })
 
-      emojiGrid.appendChild(emojiElement)
-    })
+        emojiGrid.appendChild(emojiElement)
+      })
 
     pickerContainer.appendChild(categoryHeader)
     pickerContainer.appendChild(emojiGrid)
