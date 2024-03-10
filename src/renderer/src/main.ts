@@ -1,4 +1,10 @@
+import Sentry from '@sentry/electron'
+
 import categories from '../../../resources/categories.json'
+
+Sentry.init({
+  dsn: 'https://c8d16fe04a7f4361230ce950a160c21e@o271079.ingest.us.sentry.io/4506888948219904'
+})
 
 const recentEmojisKey = 'recentEmojis'
 const maxRecentEmojis = 20
