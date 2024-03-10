@@ -98,8 +98,8 @@ function createTray() {
 app.whenReady().then(() => {
   autoUpdater.setFeedURL({
     provider: 'github',
-    repo: 'deniztetik',
-    owner: 'keymoji',
+    repo: 'keymoji',
+    owner: 'deniztetik',
     private: true,
     token: process.env.GH_TOKEN
   })
