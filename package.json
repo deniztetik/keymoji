@@ -35,6 +35,7 @@
     "@electron/notarize": "^2.3.0",
     "@rushstack/eslint-patch": "^1.7.1",
     "@types/node": "^18.19.9",
+    "dotenv": "^16.4.5",
     "electron": "^28.2.0",
     "electron-builder": "^24.9.1",
     "electron-notarize": "^1.2.2",
