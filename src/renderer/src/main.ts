@@ -98,7 +98,6 @@ document.addEventListener('DOMContentLoaded', () => {
         emojiElement.style.fontSize = '24px'
         emojiElement.style.cursor = 'pointer'
         emojiElement.style.border = 'none'
-        emojiElement.style.background = 'none'
         emojiElement.addEventListener('click', () => {
           saveRecentEmoji(emoji.emoji) // Save as a recent emoji
           updateRecentEmojisSection() // Update the recent emojis section
