@@ -17,6 +17,7 @@ let pickerWindow: BrowserWindow | null = null
 const feedURL = `https://api.github.com/repos/${owner}/${repo}/releases`
 
 log.initialize()
+log.transports.file.level = 'info'
 
 function createTray() {
   function createPickerWindow() {
