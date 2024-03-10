@@ -3,11 +3,11 @@ import { autoUpdater } from 'electron-updater'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 
-import Sentry from '@sentry/electron'
+import { init } from '@sentry/electron/main'
 
 import trayicon from '../../resources/trayicon.png?asset'
 
-Sentry.init({
+init({
   dsn: 'https://c8d16fe04a7f4361230ce950a160c21e@o271079.ingest.us.sentry.io/4506888948219904'
 })
 
