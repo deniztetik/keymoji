@@ -13,8 +13,6 @@ init({
 
 let pickerWindow: BrowserWindow | null = null
 
-console.log('++process.ENV.GH_TOKEN++', process.env.GH_TOKEN)
-
 autoUpdater.setFeedURL({
   provider: 'github',
   repo: 'keymoji',
