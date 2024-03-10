@@ -1,15 +1,16 @@
 import { app, autoUpdater, BrowserWindow, dialog, globalShortcut, ipcMain, Tray } from 'electron'
 import Store from 'electron-store'
 import { join } from 'path'
+import dotenv from 'dotenv'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import trayicon from '../../resources/trayicon.png?asset'
 
 const store = new Store()
+dotenv.config()
 
 const owner = 'deniztetik'
 const repo = 'keymoji'
-const token = process.env.GH_TOKEN
-store.set('githubToken', token)
+const token = process.env.GITHUB_TOKEN
 
 let pickerWindow: BrowserWindow | null = null
 
@@ -95,7 +96,6 @@ function createTray() {
 // Some APIs can only be used after this event occurs.
 app.whenReady().then(() => {
   const feedURL = `https://api.github.com/repos/${owner}/${repo}/releases`
-  const accessToken = store.get('githubToken')
 
   if (app.dock) {
     app.dock.hide()
@@ -119,7 +119,7 @@ app.whenReady().then(() => {
   autoUpdater.setFeedURL({
     url: feedURL,
     headers: {
-      Authorization: `token ${accessToken}`
+      Authorization: `token ${token}`
     }
   })
 
