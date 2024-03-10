@@ -19,6 +19,8 @@ const owner = 'deniztetik'
 const repo = 'keymoji'
 const token = process.env.GITHUB_TOKEN
 
+console.log('+++HI NEW VERSION HERE+++')
+
 let pickerWindow: BrowserWindow | null = null
 
 const feedURL = `https://api.github.com/repos/${owner}/${repo}/releases`
