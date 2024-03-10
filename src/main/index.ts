@@ -1,4 +1,5 @@
 import { app, BrowserWindow, globalShortcut, ipcMain, Tray } from 'electron'
+import { autoUpdater } from 'electron-updater'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import trayicon from '../../resources/trayicon.png?asset'
@@ -87,9 +88,7 @@ function createTray() {
 // Some APIs can only be used after this event occurs.
 app.whenReady().then(() => {
   if (app.isPackaged) {
-    // autoUpdater.logger = log
-    // autoUpdater.addAuthHeader(`token ${token}`)
-    // autoUpdater.checkForUpdatesAndNotify()
+    autoUpdater.checkForUpdatesAndNotify()
   }
 
   if (app.dock) {
