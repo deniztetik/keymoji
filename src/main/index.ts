@@ -30,8 +30,6 @@ autoUpdater.setFeedURL({
   }
 })
 
-autoUpdater.logger.transports.file.level = 'debug'
-
 function checkForUpdates() {
   autoUpdater.checkForUpdates()
 }
