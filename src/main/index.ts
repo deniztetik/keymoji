@@ -1,20 +1,9 @@
 import { app, BrowserWindow, globalShortcut, ipcMain, Tray } from 'electron'
-import { autoUpdater } from 'electron-updater'
-import log from 'electron-log/main'
 import { join } from 'path'
-import dotenv from 'dotenv'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import trayicon from '../../resources/trayicon.png?asset'
 
-dotenv.config()
-
-const owner = 'deniztetik'
-const repo = 'keymoji'
-const token = process.env.GITHUB_TOKEN
-
 let pickerWindow: BrowserWindow | null = null
-
-const feedURL = `https://api.github.com/repos/${owner}/${repo}/releases`
 
 function createTray() {
   function createPickerWindow() {
