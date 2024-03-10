@@ -87,10 +87,8 @@ function createTray() {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.whenReady().then(() => {
-  if (app.isPackaged) {
-    autoUpdater.autoDownload = false
-    autoUpdater.checkForUpdates()
-  }
+  autoUpdater.autoDownload = false
+  autoUpdater.checkForUpdates()
 
   if (app.dock) {
     app.dock.hide()
