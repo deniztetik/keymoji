@@ -63,10 +63,10 @@ document.addEventListener('DOMContentLoaded', () => {
   quitButton.style.right = '5px'
   quitButton.style.padding = '5px 10px'
   quitButton.addEventListener('click', () => {
-    window.close() // This should close the emoji picker window
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     const { ipcRenderer } = require('electron')
     ipcRenderer.send('quit-app')
+    setTimeout(window.close, 10) // This should close the emoji picker window
   })
 
   const recentEmojisHeader = document.createElement('h2')
