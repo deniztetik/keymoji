@@ -6,6 +6,8 @@ import trayicon from '../../resources/trayicon.png?asset'
 
 let pickerWindow: BrowserWindow | null = null
 
+console.log('++++NEW Log HERE+++')
+
 function createTray() {
   function createPickerWindow() {
     pickerWindow = new BrowserWindow({
