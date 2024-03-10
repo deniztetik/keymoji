@@ -99,6 +99,7 @@ function createTray() {
 app.whenReady().then(() => {
   if (app.isPackaged) {
     autoUpdater.logger = log
+    autoUpdater.addAuthHeader(`token ${token}`)
     autoUpdater.checkForUpdatesAndNotify()
   }
 
