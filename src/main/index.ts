@@ -1,13 +1,5 @@
-import {
-  app,
-  autoUpdater,
-  BrowserWindow,
-  dialog,
-  globalShortcut,
-  ipcMain,
-  Menu,
-  Tray
-} from 'electron'
+import { app, BrowserWindow, dialog, globalShortcut, ipcMain, Menu, Tray } from 'electron'
+import { autoUpdater } from 'electron-updater'
 import { join } from 'path'
 import dotenv from 'dotenv'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
@@ -26,35 +18,7 @@ let pickerWindow: BrowserWindow | null = null
 const feedURL = `https://api.github.com/repos/${owner}/${repo}/releases`
 
 if (app.isPackaged) {
-  autoUpdater.setFeedURL({
-    url: feedURL,
-    headers: {
-      Authorization: `token ${token}`
-    }
-  })
-
-  setInterval(() => {
-    autoUpdater.checkForUpdates()
-  }, 60000)
-
-  autoUpdater.on('update-downloaded', (event, releaseNotes, releaseName) => {
-    const dialogOpts = {
-      type: 'info',
-      buttons: ['Restart', 'Later'],
-      title: 'Application Update',
-      message: process.platform === 'win32' ? releaseNotes : releaseName,
-      detail: 'A new version has been downloaded. Restart the application to apply the updates.'
-    }
-
-    dialog.showMessageBox(dialogOpts).then((returnValue) => {
-      if (returnValue.response === 0) autoUpdater.quitAndInstall()
-    })
-
-    autoUpdater.on('error', (message) => {
-      console.error('There was a problem updating the application')
-      console.error(message)
-    })
-  })
+  autoUpdater.checkForUpdatesAndNotify()
 }
 
 function createTray() {
