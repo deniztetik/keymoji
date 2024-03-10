@@ -23,15 +23,36 @@ let pickerWindow: BrowserWindow | null = null
 
 const feedURL = `https://api.github.com/repos/${owner}/${repo}/releases`
 
-autoUpdater.setFeedURL({
-  url: feedURL,
-  headers: {
-    Authorization: `token ${token}`
-  }
-})
+if (app.isPackaged) {
+  autoUpdater.setFeedURL({
+    url: feedURL,
+    headers: {
+      Authorization: `token ${token}`
+    }
+  })
 
-function checkForUpdates() {
-  autoUpdater.checkForUpdates()
+  setInterval(() => {
+    autoUpdater.checkForUpdates()
+  }, 60000)
+
+  autoUpdater.on('update-downloaded', (event, releaseNotes, releaseName) => {
+    const dialogOpts = {
+      type: 'info',
+      buttons: ['Restart', 'Later'],
+      title: 'Application Update',
+      message: process.platform === 'win32' ? releaseNotes : releaseName,
+      detail: 'A new version has been downloaded. Restart the application to apply the updates.'
+    }
+
+    dialog.showMessageBox(dialogOpts).then((returnValue) => {
+      if (returnValue.response === 0) autoUpdater.quitAndInstall()
+    })
+
+    autoUpdater.on('error', (message) => {
+      console.error('There was a problem updating the application')
+      console.error(message)
+    })
+  })
 }
 
 function createTray() {
@@ -134,8 +155,6 @@ app.whenReady().then(() => {
     app.quit()
   })
 
-  autoUpdater.checkForUpdates()
-
   createTray()
 })
 
@@ -150,49 +169,3 @@ app.on('window-all-closed', () => {
 
 // In this file you can include the rest of your app"s specific main process
 // code. You can also put them in separate files and require them here.
-
-// Listen for update events
-autoUpdater.on('update-available', () => {
-  dialog.showMessageBox({
-    type: 'info',
-    title: 'Update Available',
-    message:
-      'A new version of the app is available. It will be downloaded and installed automatically.'
-  })
-})
-
-autoUpdater.on('update-downloaded', (_, __, releaseName) => {
-  const dialogOpts = {
-    type: 'info',
-    buttons: ['Restart', 'Later'],
-    title: 'Application Update',
-    message: releaseName,
-    detail: 'A new version has been downloaded. Restart the application to apply the updates.'
-  }
-
-  dialog.showMessageBox(dialogOpts).then((returnValue) => {
-    if (returnValue.response === 0) autoUpdater.quitAndInstall()
-  })
-})
-
-autoUpdater.on('error', (error) => {
-  dialog.showErrorBox('Update Error', error == null ? 'unknown' : (error.stack || error).toString())
-})
-
-// Create a menu item for manual update check
-const menuTemplate = [
-  // ...
-  {
-    label: 'Help',
-    submenu: [
-      {
-        label: 'Check for Updates',
-        click: checkForUpdates
-      }
-    ]
-  }
-]
-
-// Set the application menu
-const menu = Menu.buildFromTemplate(menuTemplate)
-Menu.setApplicationMenu(menu)
