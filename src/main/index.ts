@@ -1,5 +1,6 @@
-import { app, BrowserWindow, dialog, globalShortcut, ipcMain, Menu, Tray } from 'electron'
+import { app, BrowserWindow, globalShortcut, ipcMain, Tray } from 'electron'
 import { autoUpdater } from 'electron-updater'
+import log from 'electron-log/main'
 import { join } from 'path'
 import dotenv from 'dotenv'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
