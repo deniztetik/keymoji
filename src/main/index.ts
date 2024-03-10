@@ -98,9 +98,9 @@ function createTray() {
 // Some APIs can only be used after this event occurs.
 app.whenReady().then(() => {
   if (app.isPackaged) {
-    autoUpdater.logger = log
-    autoUpdater.addAuthHeader(`token ${token}`)
-    autoUpdater.checkForUpdatesAndNotify()
+    // autoUpdater.logger = log
+    // autoUpdater.addAuthHeader(`token ${token}`)
+    // autoUpdater.checkForUpdatesAndNotify()
   }
 
   if (app.dock) {
