@@ -1,0 +1,90 @@
+/* Base Styles */
+:root {
+    --background-color: #fff;
+    --text-color: #333;
+    --button-bg-color: #ff453a;
+    --button-hover-bg-color: #bf3325;
+    --emoji-hover-bg-color: #f0f0f0;
+    --box-shadow-color: rgba(0, 0, 0, 0.1);
+    --header-font-family: 'Open Sans', 'Arial', sans-serif;
+    --header-font-size: 1.2rem;
+    --emoji-font-size: 24px;
+    --border-radius: 5px;
+}
+
+/* Dark Theme Variables */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --background-color: #1a1a1a;
+        --text-color: #ccc;
+        --button-bg-color: #3a3a3a;
+        --button-hover-bg-color: #2a2a2a;
+        --emoji-hover-bg-color: #333;
+        --box-shadow-color: rgba(255, 255, 255, 0.1);
+    }
+}
+
+html {
+    background: var(--background-color);
+}
+
+#emojiPicker {
+    display: flex;
+    flex-direction: column;
+    max-width: 600px;
+    margin: auto;
+    padding: 10px;
+    overflow-y: auto;
+    background: var(--background-color);
+    border-radius: 8px;
+    box-shadow: 0 2px 4px var(--box-shadow-color);
+    /* Preserving the original border radius and shadow */
+}
+
+#emojiPicker h2 {
+    text-align: center;
+    font-family: var(--header-font-family);
+    font-size: var(--header-font-size);
+    color: var(--text-color);
+    margin-top: 20px;
+    margin-bottom: 10px;
+    padding: 0 10px;
+    /* Ensuring header styles are included */
+}
+
+#emojiPicker .emoji {
+    font-size: var(--emoji-font-size);
+    cursor: pointer;
+    border: none;
+    background: none;
+    padding: 5px;
+    border-radius: var(--border-radius);
+    transition: background-color 0.3s ease;
+    /* Included all emoji button styles */
+}
+
+#emojiPicker .emoji:hover {
+    background-color: var(--emoji-hover-bg-color);
+}
+
+#emojiPicker div {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(40px, 1fr));
+    gap: 5px;
+    padding: 10px;
+    /* Grid and spacing for emoji container */
+}
+
+#quitButton {
+    background-color: var(--button-bg-color);
+    color: white;
+    border: none;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    font-weight: bold;
+    /* Quit button styling */
+}
+
+#quitButton:hover {
+    background-color: var(--button-hover-bg-color);
+}
