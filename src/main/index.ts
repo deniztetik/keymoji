@@ -5,7 +5,7 @@ import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 
 import { init } from '@sentry/electron/main'
 
-import trayicon from '../../resources/trayicon.png?asset'
+import trayicon from '../../resources/trayiconTemplate.png?asset'
 
 init({
   dsn: 'https://c8d16fe04a7f4361230ce950a160c21e@o271079.ingest.us.sentry.io/4506888948219904'
