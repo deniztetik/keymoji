@@ -48,20 +48,10 @@ function updateRecentEmojisSection() {
 document.addEventListener('DOMContentLoaded', () => {
   const pickerContainer = document.createElement('div')
   pickerContainer.id = 'emojiPicker'
-  pickerContainer.style.display = 'flex'
-  pickerContainer.style.flexDirection = 'column'
-  pickerContainer.style.maxWidth = '600px'
-  pickerContainer.style.margin = 'auto'
-  pickerContainer.style.padding = '10px'
-  pickerContainer.style.overflowY = 'auto'
 
   const quitButton = document.createElement('button')
   quitButton.textContent = 'Quit'
   quitButton.id = 'quitButton'
-  quitButton.style.position = 'absolute'
-  quitButton.style.top = '5px'
-  quitButton.style.right = '5px'
-  quitButton.style.padding = '5px 10px'
   quitButton.addEventListener('click', () => {
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     const { ipcRenderer } = require('electron')
@@ -75,10 +65,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const recentEmojisGrid = document.createElement('div')
   recentEmojisGrid.id = 'recent-emojis'
-  recentEmojisGrid.style.display = 'grid'
-  recentEmojisGrid.style.gridTemplateColumns = 'repeat(auto-fill, minmax(40px, 1fr))'
-  recentEmojisGrid.style.gap = '5px'
-  recentEmojisGrid.style.padding = '10px'
 
   // Append the "Recently Used" section first
   pickerContainer.appendChild(recentEmojisHeader)
@@ -90,10 +76,7 @@ document.addEventListener('DOMContentLoaded', () => {
     categoryHeader.style.textAlign = 'center'
 
     const emojiGrid = document.createElement('div')
-    emojiGrid.style.display = 'grid'
-    emojiGrid.style.gridTemplateColumns = 'repeat(auto-fill, minmax(40px, 1fr))'
-    emojiGrid.style.gap = '5px'
-    emojiGrid.style.padding = '10px'
+    emojiGrid.className = 'emojiGrid'
 
     Object.values(emojis)
       .flatMap((arr) => arr)
@@ -101,9 +84,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const emojiElement = document.createElement('button')
         emojiElement.textContent = emoji.emoji
         emojiElement.className = 'emoji'
-        emojiElement.style.fontSize = '24px'
-        emojiElement.style.cursor = 'pointer'
-        emojiElement.style.border = 'none'
         emojiElement.addEventListener('click', () => {
           saveRecentEmoji(emoji.emoji) // Save as a recent emoji
           updateRecentEmojisSection() // Update the recent emojis section
