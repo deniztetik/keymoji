@@ -7,6 +7,7 @@ import trayicon from '../../resources/trayiconTemplate.png?asset'
 let pickerWindow: BrowserWindow | null = null
 
 function createTray() {
+  let pickerWindow: BrowserWindow | null = null
   function createPickerWindow() {
     pickerWindow = new BrowserWindow({
       width: 300,
@@ -81,6 +82,8 @@ function createTray() {
 
   // Check if the hotkey is registered
   console.log(globalShortcut.isRegistered('Alt+E'))
+
+  createPickerWindow()
 }
 
 // This method will be called when Electron has finished
