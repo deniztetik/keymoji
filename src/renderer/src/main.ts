@@ -1,10 +1,4 @@
-import { init } from '@sentry/electron/renderer'
-
 import categories from '../../../resources/categories.json'
-
-init({
-  dsn: 'https://c8d16fe04a7f4361230ce950a160c21e@o271079.ingest.us.sentry.io/4506888948219904'
-})
 
 const recentEmojisKey = 'recentEmojis'
 const maxRecentEmojis = 20
@@ -111,4 +105,10 @@ document.addEventListener('keydown', (event) => {
     // Assuming 'window' is your BrowserWindow instance
     window.close() // Close the current window
   }
+})
+
+import('@sentry/electron/renderer').then(({ init }) => {
+  init({
+    dsn: 'https://c8d16fe04a7f4361230ce950a160c21e@o271079.ingest.us.sentry.io/4506888948219904'
+  })
 })

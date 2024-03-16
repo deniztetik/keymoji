@@ -1,26 +1,10 @@
 import { app, BrowserWindow, globalShortcut, ipcMain, Tray } from 'electron'
-import { autoUpdater } from 'electron-updater'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 
-import { init } from '@sentry/electron/main'
-
 import trayicon from '../../resources/trayiconTemplate.png?asset'
 
-init({
-  dsn: 'https://c8d16fe04a7f4361230ce950a160c21e@o271079.ingest.us.sentry.io/4506888948219904'
-})
-
 let pickerWindow: BrowserWindow | null = null
-
-autoUpdater.setFeedURL({
-  provider: 'github',
-  repo: 'keymoji',
-  owner: 'deniztetik',
-  private: true,
-  token:
-    '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'
-})
 
 function createTray() {
   function createPickerWindow() {
@@ -108,7 +92,18 @@ app.whenReady().then(() => {
     openAsHidden: true
   })
 
-  autoUpdater.checkForUpdatesAndNotify()
+  import('electron-updater').then(({ autoUpdater }) => {
+    autoUpdater.setFeedURL({
+      provider: 'github',
+      repo: 'keymoji',
+      owner: 'deniztetik',
+      private: true,
+      token:
+        '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'
+    })
+
+    autoUpdater.checkForUpdatesAndNotify()
+  })
 
   if (app.dock) {
     app.dock.hide()
@@ -143,3 +138,8 @@ app.on('window-all-closed', () => {
 
 // In this file you can include the rest of your app"s specific main process
 // code. You can also put them in separate files and require them here.
+import('@sentry/electron/main').then(({ init }) => {
+  init({
+    dsn: 'https://c8d16fe04a7f4361230ce950a160c21e@o271079.ingest.us.sentry.io/4506888948219904'
+  })
+})
