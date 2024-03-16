@@ -4,8 +4,6 @@ import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 
 import trayicon from '../../resources/trayiconTemplate.png?asset'
 
-let pickerWindow: BrowserWindow | null = null
-
 function createTray() {
   let pickerWindow: BrowserWindow | null = null
   function createPickerWindow() {
