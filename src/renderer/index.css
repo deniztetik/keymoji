@@ -67,13 +67,6 @@ html {
     background-color: var(--emoji-hover-bg-color);
 }
 
-#emojiPicker div {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(40px, 1fr));
-    gap: 5px;
-    padding: 10px;
-}
-
 #quitButton {
     background-color: var(--button-bg-color);
     color: white;
@@ -106,3 +99,38 @@ html {
     padding: 10px;
 }
 
+#searchBarContainer {
+    margin: 20px 0;
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+    background-color: var(--background-color);
+    /* Match theme */
+    box-shadow: 0 2px 4px var(--box-shadow-color);
+}
+
+#searchInput {
+    width: 80%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 1rem;
+    color: var(--text-color);
+    background-color: inherit;
+}
+
+/* Adjusting for night mode */
+.night-mode #searchInput {
+    border-color: #555;
+    color: #ddd;
+    background-color: #333;
+}
+
+.visible-emoji {
+    display: block;
+    /* Or 'flex', 'inline-block', etc., depending on your layout */
+}
+
+.hidden-emoji {
+    display: none;
+}
