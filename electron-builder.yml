@@ -28,6 +28,11 @@ mac:
   notarize: false
   hardenedRuntime: true
   gatekeeperAssess: false
+  target:
+    - target: dmg
+      arch: universal
+    - target: zip
+      arch: universal
 afterSign: './notarize.js'
 dmg:
   artifactName: ${name}-${version}.${ext}
