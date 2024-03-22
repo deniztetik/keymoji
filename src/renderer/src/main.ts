@@ -37,7 +37,7 @@ const maxRecentEmojis = 20
 function saveRecentEmoji(emoji: { emoji: string; name: string }) {
   const recentEmojis = getRecentEmojis()
   // Check if the emoji already exists based on its character to avoid duplicates
-  const newRecentEmojis = [emoji, ...recentEmojis.filter((e) => e.character !== emoji.emoji)].slice(
+  const newRecentEmojis = [emoji, ...recentEmojis.filter((e) => e.emoji !== emoji.emoji)].slice(
     0,
     maxRecentEmojis
   )
