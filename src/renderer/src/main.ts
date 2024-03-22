@@ -1,4 +1,12 @@
+import TrieSearch from 'trie-search'
+
 import categories from '../../../resources/categories.json'
+
+type Emoji = {
+  name: string // Example property
+  emoji: string // Example property
+  // Add more as needed, inferred as necessary
+}
 
 function debounce(func, wait) {
   let timeout
@@ -20,22 +28,24 @@ function debounce(func, wait) {
   return debounced
 }
 
+let trie = new TrieSearch<Emoji>('name')
+
 const recentEmojisKey = 'recentEmojis'
 const maxRecentEmojis = 20
 
 // Modify the function to accept an emoji object containing both character and name
-function saveRecentEmoji(emoji: { character: string; name: string }) {
+function saveRecentEmoji(emoji: { emoji: string; name: string }) {
   const recentEmojis = getRecentEmojis()
   // Check if the emoji already exists based on its character to avoid duplicates
-  const newRecentEmojis = [
-    emoji,
-    ...recentEmojis.filter((e) => e.character !== emoji.character)
-  ].slice(0, maxRecentEmojis)
+  const newRecentEmojis = [emoji, ...recentEmojis.filter((e) => e.character !== emoji.emoji)].slice(
+    0,
+    maxRecentEmojis
+  )
   localStorage.setItem(recentEmojisKey, JSON.stringify(newRecentEmojis))
 }
 
 // Adjust the return type to reflect the new data structure
-function getRecentEmojis(): { character: string; name: string }[] {
+function getRecentEmojis(): { emoji: string; name: string }[] {
   const recentEmojisJSON = localStorage.getItem(recentEmojisKey)
   return recentEmojisJSON ? JSON.parse(recentEmojisJSON) : []
 }
@@ -47,12 +57,12 @@ function updateRecentEmojisSection() {
 
   getRecentEmojis().forEach((emoji) => {
     const emojiElement = document.createElement('button')
-    emojiElement.textContent = emoji.character
+    emojiElement.textContent = emoji.emoji
     emojiElement.dataset.name = emoji.name
     emojiElement.className = 'emoji visible-emoji'
     emojiElement.addEventListener('click', () => {
       saveRecentEmoji(emoji) // Save the clicked emoji as a recent emoji
-      navigator.clipboard.writeText(emoji.character).then(() => {
+      navigator.clipboard.writeText(emoji.emoji).then(() => {
         window.close()
       })
     })
@@ -61,36 +71,54 @@ function updateRecentEmojisSection() {
   })
 }
 
-function filterEmojis(searchTerm: string) {
-  console.log('++emojiElementMap', emojiElementMap)
-  searchTerm = searchTerm.toLowerCase() // Ensure the search term is lowercase for case-insensitive comparison
-  const emojis = Array.from(emojiElementMap.values()) // Get all emoji elements from the map
-  const batchSize = 20 // Determine an appropriate batch size
+function updateCategoryHeaders(categoryVisibility) {
+  categoryVisibility.forEach((isVisible, categoryName) => {
+    const header = document.getElementById(`header-${categoryName}`) // Assuming you have an ID like this
+    if (header) {
+      header.style.display = isVisible ? '' : 'none'
+    }
+  })
+}
 
-  function updateVisibilityForBatch(batch) {
+function filterEmojis(searchTerm: string) {
+  const categoryVisibility = new Map() // Track visibility for each category
+
+  if (searchTerm === '') {
+    // If the search term is empty, make all emojis visible
     requestAnimationFrame(() => {
-      for (let emoji of batch) {
-        console.log('+++emoji', emoji)
-        const isVisible = emoji.dataset.name.toLowerCase().includes(searchTerm)
-        emoji.classList.toggle('visible-emoji', isVisible)
-        emoji.classList.toggle('hidden-emoji', !isVisible)
+      emojiElementMap.forEach((emoji) => {
+        emoji.classList.add('visible-emoji')
+        emoji.classList.remove('hidden-emoji')
+        // Assuming each emoji element has a data-category attribute
+        categoryVisibility.set(emoji.dataset.category, true)
+      })
+    })
+    // Update category headers based on visibility
+    updateCategoryHeaders(categoryVisibility)
+    document.querySelectorAll('h2').forEach((item) => (item.style.display = ''))
+
+    return
+  }
+
+  const matchedEmojis = trie.search(searchTerm.toLowerCase())
+
+  const matchedNames = new Set(matchedEmojis.map((emoji) => emoji.name.toLowerCase()))
+
+  requestAnimationFrame(() => {
+    emojiElementMap.forEach((emoji, name) => {
+      const isVisible = matchedNames.has(name)
+      emoji.classList.toggle('visible-emoji', isVisible)
+      emoji.classList.toggle('hidden-emoji', !isVisible)
+      const category = emoji.dataset.category
+      if (isVisible) {
+        categoryVisibility.set(category, true)
+      } else if (!categoryVisibility.has(category)) {
+        categoryVisibility.set(category, false)
       }
     })
-  }
-
-  // Function to process emojis in batches
-  function processInBatches(allEmojis, index = 0) {
-    if (index >= allEmojis.length) return // Base case: done processing
-
-    const batch = allEmojis.slice(index, index + batchSize)
-    updateVisibilityForBatch(batch) // Update visibility for current batch
-
-    // Schedule next batch
-    requestAnimationFrame(() => processInBatches(allEmojis, index + batchSize))
-  }
-
-  // Start processing in batches
-  processInBatches(emojis)
+    // Update category headers based on visibility
+    updateCategoryHeaders(categoryVisibility)
+  })
 }
 
 let emojiElementMap = new Map()
@@ -148,6 +176,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   Object.entries(categories.emojis).forEach(([categoryName, emojis]) => {
     const categoryHeader = document.createElement('h2')
+    categoryHeader.id = `header-${categoryName}` // Ensure this matches what `updateCategoryHeaders` expects
     categoryHeader.textContent = categoryName
     categoryHeader.style.textAlign = 'center'
 
@@ -157,13 +186,15 @@ document.addEventListener('DOMContentLoaded', () => {
     Object.values(emojis)
       .flatMap((arr) => arr)
       .forEach((emoji) => {
-        // console.log('+++emoji', emoji.emoji, emoji.name)
+        trie.map(emoji.name, emoji)
+        console.log('+++emoji', emoji)
         const emojiElement = document.createElement('button')
         emojiElement.textContent = emoji.emoji
         emojiElement.dataset.name = emoji.name // When populating the emojis initially
+        emojiElement.dataset.category = categoryName
         emojiElement.className = 'emoji visible-emoji'
         emojiElement.addEventListener('click', () => {
-          saveRecentEmoji(emoji.emoji) // Save as a recent emoji
+          saveRecentEmoji(emoji) // Save as a recent emoji
           updateRecentEmojisSection() // Update the recent emojis section
           navigator.clipboard.writeText(emoji.emoji).then(() => {
             setTimeout(window.close, 10)
