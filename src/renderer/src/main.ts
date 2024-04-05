@@ -63,7 +63,7 @@ function updateRecentEmojisSection() {
     emojiElement.addEventListener('click', () => {
       saveRecentEmoji(emoji) // Save the clicked emoji as a recent emoji
       navigator.clipboard.writeText(emoji.emoji).then(() => {
-        window.close()
+        setTimeout(window.close, 10)
       })
     })
 
