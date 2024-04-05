@@ -4,6 +4,11 @@ import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 
 import trayicon from '../../resources/trayiconTemplate.png?asset'
 
+// Want to hide the dock icon on macOS as early as possible
+if (app.dock) {
+  app.dock.hide()
+}
+
 function createTray() {
   let pickerWindow: BrowserWindow | null = null
   function createPickerWindow() {
