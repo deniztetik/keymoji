@@ -100,7 +100,8 @@ app.whenReady().then(() => {
       owner: 'deniztetik',
       private: true,
       token:
-        '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'
+        // expires 4/4/25
+        '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'
     })
 
     autoUpdater.checkForUpdatesAndNotify()
